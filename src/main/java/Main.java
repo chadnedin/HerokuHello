@@ -6,6 +6,10 @@ import java.util.Map;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import static javax.measure.unit.SI.KILOGRAM;
+import javax.measure.quantity.Mass;
+import org.jscience.physics.model.RelativisticModel;
+import org.jscience.physics.amount.Amount;
 import static spark.Spark.*;
 import spark.template.freemarker.FreeMarkerEngine;
 import spark.ModelAndView;
@@ -20,7 +24,7 @@ public class Main {
     port(Integer.valueOf(System.getenv("PORT")));
     staticFileLocation("/public");
 
-    get("/hello", (req, res) -> "Hello World");
+  
 
     get("/", (request, response) -> {
             Map<String, Object> attributes = new HashMap<>();
@@ -54,6 +58,12 @@ public class Main {
         if (connection != null) try{connection.close();} catch(SQLException e){}
       }
     }, new FreeMarkerEngine());
+    
+       get("/hello", (req, res) -> {
+      RelativisticModel.select();
+      Amount<Mass> m = Amount.valueOf("12 GeV").to(KILOGRAM);
+      return "E=mc^2: 12 GeV = " + m.toString();
+    });
 
   }
 
